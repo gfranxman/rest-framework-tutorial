@@ -8,6 +8,18 @@ from pygments import highlight
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
+MULTI_CHOICES = [('CA', 'California'),
+                 ('OR', 'Oregon'),
+                 ('WA', 'Washington'),
+                 (0, 'Zero'),
+                 (1, 'One'),
+                 (2, 'Two'),
+                 (3, 'Three'),
+                 (3.5, 'Three-point-five'),
+                 (10, 'Ten'),
+                 (True, 'True'),
+                 (False, 'False'),
+                 ]
 
 
 class Snippet(models.Model):
@@ -21,8 +33,13 @@ class Snippet(models.Model):
     style = models.CharField(choices=STYLE_CHOICES,
                              default='friendly',
                              max_length=100)
-    owner = models.ForeignKey('auth.User', related_name='snippets')
+    owner = models.ForeignKey('auth.User',
+                              related_name='snippets',
+                              on_delete=models.CASCADE)
     highlighted = models.TextField()
+    multiselect = models.CharField(choices=MULTI_CHOICES,
+                                   max_length=100,
+                                   default='')
 
     class Meta:
         ordering = ('created',)
