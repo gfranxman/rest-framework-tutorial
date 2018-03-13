@@ -44,3 +44,11 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class PizzaViewSet(object):
+    pass
+
+
+class ToppingViewSet(object):
+    pass
