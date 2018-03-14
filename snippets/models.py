@@ -1,4 +1,5 @@
 from django.db import models
+from multiselectfield import MultiSelectField
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 from pygments.lexers import get_lexer_by_name
@@ -11,14 +12,14 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 MULTI_CHOICES = [('CA', 'California'),
                  ('OR', 'Oregon'),
                  ('WA', 'Washington'),
-                 (0, 'Zero'),
-                 (1, 'One'),
-                 (2, 'Two'),
-                 (3, 'Three'),
-                 (3.5, 'Three-point-five'),
-                 (10, 'Ten'),
-                 (True, 'True'),
-                 (False, 'False'),
+                 ('0', 'Zero'),
+                 ('1', 'One'),
+                 ('2', 'Two'),
+                 ('3', 'Three'),
+                 ('3.5', 'Three-point-five'),
+                 ('10', 'Ten'),
+                 ('True', 'True'),
+                 ('False', 'False'),
                  ]
 
 
@@ -40,6 +41,7 @@ class Snippet(models.Model):
     multiselect = models.CharField(choices=MULTI_CHOICES,
                                    max_length=100,
                                    default='')
+    mselect = MultiSelectField(choices=MULTI_CHOICES, null=True, blank=True)
 
     class Meta:
         ordering = ('created',)
