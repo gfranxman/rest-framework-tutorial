@@ -40,7 +40,7 @@ class Pizza(models.Model):
     toppings = models.ManyToManyField(Topping, blank=True)
 
     # two ways to type the pizza: choices or foreign key
-    type = models.CharField(choices=FOOD_TYPES, default=FOOD_TYPES[0][0], max_length=40)
+    pizza_type_char = models.CharField(choices=FOOD_TYPES, default=FOOD_TYPES[0][0], max_length=40)
     pizza_type = models.ForeignKey(ToppingType)
 
     def __str__(self):
@@ -49,19 +49,19 @@ class Pizza(models.Model):
     def valid_toppings(self):
         # validate choices
         for topping in self.toppings.all():
-            if self.type in ('meat', 'veg'):
+            if self.pizza_type_char in ('meat', 'veg'):
                 # then all topping must either match, or be 'any'
-                if topping.type != self.type or topping.type != 'mixed':
+                if topping.type != self.pizza_type_char or topping.type != 'mixed':
                     raise db.IntegrityError(
                         "cannot put {t} on {p} pizza".format(
-                            t=topping, p=self.type
+                            t=topping, p=self.pizza_type_char
                         ))
 
         # validate relations
         for topping in self.toppings.all():
             if not topping.is_compatible(self):
                 raise db.IntegrityError("cannot put {t} on {p} pizza".format(
-                    t=topping, p=self.type
+                    t=topping, p=self.pizza_type_char
                 ))
 
 
