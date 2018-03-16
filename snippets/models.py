@@ -63,3 +63,5 @@ class Snippet(models.Model):
         snippets = Snippet.objects.all()
         if len(snippets) > 100:
             snippets[0].delete()
+
+

@@ -14,7 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+# from wq.db import rest
+#
+# rest.autodiscover()
 
 urlpatterns = [
     url(r'^', include('snippets.urls')),
+    url(r'^pizza_shop/', include('pizza_shop.urls')),
 ]
