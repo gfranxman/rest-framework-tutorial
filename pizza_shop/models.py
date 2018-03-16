@@ -65,10 +65,11 @@ class Pizza(models.Model):
         #               ))
 
         # validate relations
-        for topping in self.toppings.all():
-            if not self.pizza_type.is_compatible(topping):
-                raise db.IntegrityError("cannot put {t} on {p} pizza".format(
-                    t=topping, p=self.pizza_type.name
-                ))
+        if self.id:
+            for topping in self.toppings.all():
+                if not self.pizza_type.is_compatible(topping):
+                    raise db.IntegrityError("cannot put {t} on {p} pizza".format(
+                        t=topping, p=self.pizza_type.name
+                    ))
 
 
