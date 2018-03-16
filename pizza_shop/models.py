@@ -14,7 +14,9 @@ class ToppingType(models.Model):
         compatibility is dete=rmined here.
     """
     name = models.CharField(unique=True, max_length=40)
-    homogenous = models.BooleanField(default=True)
+    homogenous = models.BooleanField(default=False)
+    universal = models.BooleanField(default=True)  # proof the bools are bad,
+                                                   # there's always a 3rd state
     rank = models.IntegerField(default=1)
 
     def __str__(self):
@@ -22,7 +24,7 @@ class ToppingType(models.Model):
 
     def is_compatible(self, topping):
         if self.homogenous:
-            return self.id == topping.topping_type.id
+            return self.id == topping.topping_type.id or topping.topping_type.universal
         return True
 
 
