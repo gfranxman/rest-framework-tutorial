@@ -20,9 +20,9 @@ class ToppingType(models.Model):
     def __str__(self):
         return self.name
 
-    def is_compatible(self, pizza):
+    def is_compatible(self, topping):
         if self.homogenous:
-            return self.id == pizza.pizza_type_id
+            return self.id == topping.topping_type.id
         return True
 
 
@@ -46,22 +46,27 @@ class Pizza(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        # import pdb; pdb.set_trace()
+        self.valid_toppings()
+        super(Pizza,self).save(*args, **kwargs)
+
     def valid_toppings(self):
         # validate choices
-        for topping in self.toppings.all():
-            if self.pizza_type_char in ('meat', 'veg'):
-                # then all topping must either match, or be 'any'
-                if topping.type != self.pizza_type_char or topping.type != 'mixed':
-                    raise db.IntegrityError(
-                        "cannot put {t} on {p} pizza".format(
-                            t=topping, p=self.pizza_type_char
-                        ))
+        # for topping in self.toppings.all():
+        #     if self.pizza_type_char in ('meat', 'veg'):
+        #         then all topping must either match, or be 'any'
+        #       if topping.type != self.pizza_type_char or topping.type != 'mixed':
+        #           raise db.IntegrityError(
+        #               "cannot put {t} on {p} pizza".format(
+        #                   t=topping, p=self.pizza_type_char
+        #               ))
 
         # validate relations
         for topping in self.toppings.all():
-            if not topping.is_compatible(self):
+            if not self.pizza_type.is_compatible(topping):
                 raise db.IntegrityError("cannot put {t} on {p} pizza".format(
-                    t=topping, p=self.pizza_type_char
+                    t=topping, p=self.pizza_type.name
                 ))
 
 
